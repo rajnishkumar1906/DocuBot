@@ -1,0 +1,31 @@
+DocuBot is a local-first AI knowledge assistant for developers. 
+It allows you to ask questions about your code, notes, or documentation without sending data to the cloud.
+
+Key features:
+1. 100% private: All data is stored locally; nothing is sent to external servers.
+2. Conversational search: Ask questions naturally, and DocuBot finds the most relevant information.
+3. Offline access: Works completely offline after initial setup.
+4. Lightweight & efficient: Minimal dependencies and fast response times.
+
+Workflow:
+1. Add files to the docs/ folder. Supported formats: .txt, .md, .py, .json, .csv.
+2. Run the indexing script (`run_bot.py`) to prepare the knowledge base.
+3. Ask questions in the terminal interface. Answers will be drawn from the indexed files.
+4. To update knowledge, add new files or modify existing ones, then re-run the script.
+
+Supported functionalities:
+- Code explanations: Ask about functions, classes, or scripts.
+- Documentation summaries: Get condensed info from markdown or text files.
+- Quick reference: Search for definitions, examples, or notes.
+- Conversational QA: Ask follow-up questions and DocuBot remembers context for the session.
+
+Best practices:
+- Keep files organized: Separate notes by topic for better retrieval.
+- Use meaningful filenames: DocuBot indexes by file paths for traceability.
+- Chunk large files: If a file is too big, consider splitting it to improve answer precision.
+- Regularly update: Add new information to the docs/ folder to keep your knowledge base current.
+
+Limitations:
+- Accuracy depends on the quality of the notes provided.
+- Works best with structured, clear, and concise information.
+- Very large documents may slow indexing; consider breaking them into smaller chunks.
