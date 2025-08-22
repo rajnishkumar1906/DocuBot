@@ -36,7 +36,7 @@ else:
     # st.success(f"Indexed {n} chunks from {len(files)} file(s).")
 
 # --- Streamlit UI ---
-st.title("🧠 DocuBot Chat")
+st.title("DocuBot Chat")
 st.write("Ask questions about your notes and code!")
 
 # Initialize session state
@@ -57,7 +57,7 @@ if user_input:
         new_docs = load_documents([MEMORY_FILE])
         new_chunks = chunk_documents(new_docs)
         index_documents(vs, new_chunks)
-        st.success("💾 Saved to memory and updated vector store!")
+        st.success("Saved to memory and updated vector store!")
     else:
         result = answer_query(vs, query, k=4)
         answer = clean_markdown(result["answer"])

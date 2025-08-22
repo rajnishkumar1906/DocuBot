@@ -18,7 +18,7 @@ def synthesize_answer(query: str, docs: List[Document]) -> str:
     """Generate an answer using Gemini model and retrieved docs."""
     
     # Friendly hardcoded replies for greetings or chit-chat
-    greetings = ["hi", "hello", "hey", "good morning", "good evening"]
+    greetings = ["hi", "hello", "hey", "good morning", "good evening","good afternoon"]
     if query.lower() in greetings:
         return "👋 Hello! I'm DocuBot, your AI assistant. How can I help you today?"
     if "how are you" in query.lower():
