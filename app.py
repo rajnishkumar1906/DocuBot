@@ -33,7 +33,30 @@ else:
     chunks = chunk_documents(docs)
     vs = get_vectorstore(PERSIST_DIR)
     n = index_documents(vs, chunks)
-    # st.success(f"Indexed {n} chunks from {len(files)} file(s).")
+
+# --- Gradient background ---
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background: linear-gradient(135deg, #32a852, #3b82f6, #4f46e5);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        color: white;
+    }
+    @keyframes gradientBG {
+        0% {background-position: 0% 50%;}
+        50% {background-position: 100% 50%;}
+        100% {background-position: 0% 50%;}
+    }
+    .stTextInput>div>div>input {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: black;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # --- Streamlit UI ---
 st.title("DocuBot Chat")
@@ -66,11 +89,10 @@ if user_input:
         st.session_state.history.append(("User", query))
         st.session_state.history.append(("DocuBot", answer))
 
-# Display chat history
+# Display chat history (without sources)
 for role, msg in st.session_state.history:
     if role == "User":
         st.markdown(f"**You:** {msg}")
     else:
         st.markdown(f"**DocuBot:** {msg}")
-        if "sources" in locals() and result.get("sources"):
-            st.markdown(f"*Sources:* {', '.join(result['sources'])}")
+                
