@@ -28,12 +28,6 @@ tiktoken
 Google Generative AI
 google-generativeai
 
-<<<<<<< HEAD
 # File Handling
 pypdf2
 python-docx
-=======
-File Handling
-pypdf2
-python-docx
->>>>>>> 6f2bfb9e88c1a14c89dc9fabd5811c1c90be3537
