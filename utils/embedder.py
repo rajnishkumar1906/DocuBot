@@ -1,9 +1,14 @@
-from langchain_community.embeddings import SentenceTransformerEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 
 DEFAULT_MODEL = "all-MiniLM-L6-v2"
 
 def get_embedder(model_name: str = DEFAULT_MODEL):
     """
-    Return a SentenceTransformer embedding model on CPU to avoid meta tensor errors.
+    Return a HuggingFace embedding model explicitly on the CPU.
     """
-    return SentenceTransformerEmbeddings(model_name=model_name, model_kwargs={"device": "cpu"})
+    # The device parameter is passed directly to the model initialization.
+    model_kwargs = {"device": "cpu"}
+    return HuggingFaceEmbeddings(
+        model_name=model_name,
+        model_kwargs=model_kwargs
+    )

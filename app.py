@@ -3,9 +3,9 @@ from pathlib import Path
 import PyPDF2
 import docx
 import re
-from utils.loader import chunk_documents
+from utils.loader import chunk_documents, ensure_dirs
 from utils.vectorstore import get_vectorstore, index_documents
-from utils.rag_chain import answer_query, retrieve
+from utils.rag_chain import answer_query
 from langchain.schema import Document
 
 # ----------------------------
@@ -43,8 +43,7 @@ def extract_text(file):
 BASE_DIR = Path(__file__).parent
 DOCS_DIR = BASE_DIR / "docs"
 PERSIST_DIR = BASE_DIR / "data"
-DOCS_DIR.mkdir(parents=True, exist_ok=True)
-PERSIST_DIR.mkdir(parents=True, exist_ok=True)
+ensure_dirs(DOCS_DIR, PERSIST_DIR)
 
 if "vs" not in st.session_state:
     st.session_state.vs = get_vectorstore(PERSIST_DIR)
@@ -205,24 +204,15 @@ prompt = st.chat_input("Ask me anything about your documents...")
 
 if prompt:
     st.session_state.history.append(("User", prompt))
-
-    vs = st.session_state.vs
-
-    # Retrieve docs based on the prompt
-    retrieved_docs = retrieve(vs, prompt, k=5)
-
-    if not retrieved_docs:
-        answer_text = "No relevant content found in the uploaded documents."
-    else:
-        # Pass the file_uploaded state to the answer_query function
-        answer_result = answer_query(
-            vs, 
-            prompt, 
-            st.session_state.history, 
-            st.session_state.file_uploaded, 
-            k=5
-        )
-        answer_text = answer_result["answer"]
     
+    # Corrected function call with the missing argument
+    answer_result = answer_query(
+        vs=st.session_state.vs, 
+        query=prompt, 
+        chat_history=st.session_state.history, 
+        file_uploaded=st.session_state.file_uploaded
+    )
+    answer_text = answer_result["answer"]
+
     st.session_state.history.append(("DocuBot", clean_markdown(answer_text)))
     st.rerun()
