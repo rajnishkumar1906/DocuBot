@@ -1,29 +1,33 @@
-# Core LangChain
+Core LangChain
 langchain
 langchain-community
 langchain-huggingface
 langsmith
 
-# Vector database
+Vector database
 chromadb
 
-# Embeddings & models
+Embeddings & models
 sentence-transformers
 transformers
 torch
 onnxruntime
 
-# Utilities
+Utilities
 pydantic
 pydantic-settings
 python-dotenv
 streamlit
 
-# Vector search
+Vector search
 faiss-cpu
 
-# Tokenizers
+Tokenizers
 tiktoken
 
-# Google Generative AI
+Google Generative AI
 google-generativeai
+
+File Handling
+pypdf2
+python-docx
