@@ -6,13 +6,16 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 ALLOWED_EXTS = {".txt", ".md", ".py", ".json", ".csv"}
 
 def ensure_dirs(docs_dir: Path, persist_dir: Path) -> None:
+    """Ensure that docs and data directories exist."""
     docs_dir.mkdir(parents=True, exist_ok=True)
     persist_dir.mkdir(parents=True, exist_ok=True)
 
 def find_files(root: Path) -> List[Path]:
+    """Recursively find files with allowed extensions."""
     return [p for p in root.rglob("*") if p.is_file() and p.suffix.lower() in ALLOWED_EXTS]
 
 def load_documents(paths: List[Path]) -> List[Document]:
+    """Load documents from paths into LangChain Document objects."""
     docs: List[Document] = []
     for path in paths:
         try:
@@ -23,6 +26,7 @@ def load_documents(paths: List[Path]) -> List[Document]:
     return docs
 
 def chunk_documents(docs: List[Document], chunk_size=500, chunk_overlap=50) -> List[Document]:
+    """Split documents into chunks while preserving metadata."""
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
