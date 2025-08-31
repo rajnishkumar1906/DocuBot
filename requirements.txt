@@ -22,8 +22,12 @@ streamlit
 # Vector search
 faiss-cpu
 
-# Tokenizers
+Tokenizers
 tiktoken
 
 # Google Generative AI
 google-generativeai
+
+# File Handling
+pypdf2
+python-docx

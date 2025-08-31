@@ -43,52 +43,6 @@ def extract_text(file):
 BASE_DIR = Path(__file__).parent
 DOCS_DIR = BASE_DIR / "docs"
 PERSIST_DIR = BASE_DIR / "data"
-
-ensure_dirs(DOCS_DIR, PERSIST_DIR)
-
-MEMORY_FILE = DOCS_DIR / "memory.txt"
-if not MEMORY_FILE.exists():
-    MEMORY_FILE.write_text("This file stores remembered facts.\n")
-
-# --- Load and index docs ---
-files = find_files(DOCS_DIR)
-if not files:
-    st.warning("No files found in docs/. Please add some files.")
-else:
-    docs = load_documents(files)
-    chunks = chunk_documents(docs)
-    vs = get_vectorstore(PERSIST_DIR)
-    n = index_documents(vs, chunks)
-
-# --- Gradient background ---
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background: linear-gradient(135deg, #32a852, #3b82f6, #4f46e5);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
-        color: white;
-    }
-    @keyframes gradientBG {
-        0% {background-position: 0% 50%;}
-        50% {background-position: 100% 50%;}
-        100% {background-position: 0% 50%;}
-    }
-    .stTextInput>div>div>input {
-        background-color: rgba(255, 255, 255, 0.8);
-        color: black;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# --- Streamlit UI ---
-st.title("DocuBot Chat")
-st.write("Ask questions about your notes and code!")
-
-# Initialize session state
 DOCS_DIR.mkdir(parents=True, exist_ok=True)
 PERSIST_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -96,6 +50,8 @@ if "vs" not in st.session_state:
     st.session_state.vs = get_vectorstore(PERSIST_DIR)
 if "history" not in st.session_state:
     st.session_state.history = []
+if "file_uploaded" not in st.session_state:
+    st.session_state.file_uploaded = False
 
 st.set_page_config(page_title="DocuBot", layout="wide")
 
@@ -224,22 +180,16 @@ with left_col:
                 st.warning(f"⚠️ Could not extract text from {file.name}")
                 continue
 
-            temp_path = DOCS_DIR / file.name
-            temp_path.write_text(content, encoding="utf-8")
-
             doc = [Document(page_content=content, metadata={"source": file.name})]
             chunks = chunk_documents(doc)
             count = index_documents(st.session_state.vs, chunks)
+            st.session_state.file_uploaded = True
 
             st.markdown(
                 f'<div class="file-card">📄 **{file.name}** — Indexed {count} chunks 🎉</div>',
                 unsafe_allow_html=True
             )
 
-# Display chat history (without sources)
-for role, msg in st.session_state.history:
-    if role == "User":
-        st.markdown(f"**You:** {msg}")
 # ----- Right Column: Chat -----
 with right_col:
     st.markdown("## 💬 Conversation")
@@ -258,15 +208,21 @@ if prompt:
 
     vs = st.session_state.vs
 
+    # Retrieve docs based on the prompt
     retrieved_docs = retrieve(vs, prompt, k=5)
 
     if not retrieved_docs:
         answer_text = "No relevant content found in the uploaded documents."
     else:
-        st.markdown(f"**DocuBot:** {msg}")
-                
-        answer_result = answer_query(vs, prompt, st.session_state.history, k=5)
+        # Pass the file_uploaded state to the answer_query function
+        answer_result = answer_query(
+            vs, 
+            prompt, 
+            st.session_state.history, 
+            st.session_state.file_uploaded, 
+            k=5
+        )
         answer_text = answer_result["answer"]
-
+    
     st.session_state.history.append(("DocuBot", clean_markdown(answer_text)))
     st.rerun()
