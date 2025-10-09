@@ -13,9 +13,24 @@ torch
 python-dotenv
 streamlit
 
+<<<<<<< HEAD
 # File handling
 PyPDF2
 python-docx
 
 # Google Generative AI
 google-generativeai
+=======
+Vector search
+faiss-cpu
+
+Tokenizers
+tiktoken
+
+Google Generative AI
+google-generativeai
+
+# File Handling
+pypdf2
+python-docx
+>>>>>>> b17551ed9c8f2a0f57beebfe692a4bdf1efe0c2a
