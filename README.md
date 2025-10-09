@@ -70,4 +70,3 @@ DocuBot relies on a RAG system that combines vector search with LLM generation:
 * **Google Gemini 1.5 Flash:** Processes retrieved content and the user query to generate precise, context-aware answers.
 
 
-Do you want me to do that next?
